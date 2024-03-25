@@ -1,4 +1,22 @@
-# POO2
+# 🍵 POO G2
+
+## 📜 Descrição
+Este projeto é uma continuidade do curso de Programação Orientada a Objetos (POO), que faz parte da formação em Engenharia de Software na Universidade XYZ. O objetivo principal deste projeto é aplicar os conceitos aprendidos durante o curso de POO em um contexto prático, desenvolvendo uma aplicação ou sistema de software.
+
+## 🪄 Tecnologias Utilizadas
+- Linguagem de Programação: Java
+- Frameworks: Spring Boot, Hibernate
+- Banco de Dados: MySQL
+- Controle de Versão: Git, GitHub
+- Outras ferramentas e bibliotecas específicas do projeto
+
+## 🚀 Funcionalidades Principais
+Neste espaço, destacaremos as principais funcionalidades ou características do projeto.
+
+## ⬇️ Instalação e Utilização
+1. Clone este repositório.
+2. Instale as dependências necessárias, se houver.
+3. Siga as instruções específicas do projeto para executá-lo.
 
 ## 👩‍💻 Membros de CC
 
