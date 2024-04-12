@@ -47,6 +47,7 @@ public class VooMediator {
 
     public String incluir(Voo voo) {
         if (validar(voo) != null) {
+            System.out.println(voo);
             return validar(voo);
         }
         else {
