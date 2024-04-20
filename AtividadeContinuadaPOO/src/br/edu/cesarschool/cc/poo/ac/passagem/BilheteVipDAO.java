@@ -3,7 +3,7 @@ import java.io.Serializable;
 import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 
 public class BilheteVipDAO {
-    private CadastroObjetos cadastro = new CadastroObjetos(Bilhete.class);
+    private CadastroObjetos cadastro = new CadastroObjetos(BilheteVip.class);
 
     public BilheteVipDAO() {
 
