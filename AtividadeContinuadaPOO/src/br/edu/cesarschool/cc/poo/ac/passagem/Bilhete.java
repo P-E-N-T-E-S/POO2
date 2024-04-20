@@ -10,8 +10,7 @@ public class Bilhete extends Registro {
 	private double pagamentoEmPontos;
 	private LocalDateTime dataHora;
 	
-	public Bilhete(LocalDateTime dhInclusao,LocalDateTime dhUltimaAtualizacao, Cliente cliente, Voo voo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
-		super(dhInclusao, dhUltimaAtualizacao);
+	public Bilhete(Cliente cliente, Voo voo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
 		this.cliente = cliente;
 		this.voo = voo;
 		this.preco = preco;

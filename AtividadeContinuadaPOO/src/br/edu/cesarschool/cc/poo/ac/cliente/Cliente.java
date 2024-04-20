@@ -8,8 +8,7 @@ public class Cliente extends Registro {
 	private String nome;
 	private double saldoPontos;
 	
-	public Cliente(LocalDateTime dhInclusao,LocalDateTime dhUltimaAtualizacao, String cpf, String nome, double saldoPontos) {
-		super(dhInclusao, dhUltimaAtualizacao);
+	public Cliente(String cpf, String nome, double saldoPontos){
 		this.cpf = cpf;
 		this.nome = nome;
 		this.saldoPontos = saldoPontos;

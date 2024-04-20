@@ -1,101 +1,104 @@
+// Source code is decompiled from a .class file using FernFlower decompiler.
 package br.edu.cesarschool.cc.poo.ac.passagem;
+
 import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
 
-import java.util.Objects;
-
 public class VooMediator {
-    VooDAO vooDao;
+   private static VooMediator instance;
+   private VooDAO vooDAO = new VooDAO();
+   private String[] aeroportosValidos = new String[]{"GRU", "CGH", "GIG", "SDU", "REC", "CWB", "POA", "BSB", "SSA", "FOR", "MAO", "SLZ", "CNF", "BEL", "JPA", "PNZ", "CAU", "FEN", "SET", "NAT", "PVH", "BVB", "FLN", "AJU", "PMW", "MCZ", "MCP", "VIX", "GYN", "CGB", "CGR", "THE", "RBR", "VCP", "RAO"};
 
-    public Voo buscar(String IdVoo) {
-        return vooDao.buscar(IdVoo);
-    }
+   private boolean validarAeroporto(String aeroporto) {
+      String[] var2 = this.aeroportosValidos;
+      int var3 = var2.length;
 
-    public String validarCiaNumero(String companhiaAerea, int numeroVoo) {
-        if (StringUtils.isVaziaOuNula(companhiaAerea) && companhiaAerea.length() < 2) {
-            return "CIA aerea errada";
-        }
+      for(int var4 = 0; var4 < var3; ++var4) {
+         String aeroportoValido = var2[var4];
+         if (aeroportoValido.equals(aeroporto)) {
+            return true;
+         }
+      }
 
-        if (numeroVoo < 0 || numeroVoo < 1000 || numeroVoo > 9999) {
-            return "Numero voo errado";
-        }
+      return false;
+   }
 
-        return null;
-    }
+   private VooMediator() {
+   }
 
-    public String validar(Voo voo) {
-        String[] aeroportos = {
-                "GRU", "CGH", "GIG", "SDU", "REC", "CWB",
-                "POA", "BSB", "SSA", "FOR", "MAO", "SLZ",
-                "CNF", "BEL", "JPA", "PNZ", "CAU", "FEN",
-                "SET", "NAT", "PVH", "BVB", "FLN", "AJU",
-                "PMW", "MCZ", "MCP", "VIX", "GYN", "CGB",
-                "CGR", "THE", "RBR", "VCP", "RAO"
-        };
+   public static synchronized VooMediator obterInstancia() {
+      if (instance == null) {
+         instance = new VooMediator();
+      }
 
-        boolean origem = false;
-        boolean destino = false;
-        for (int i = 0; i < aeroportos.length; i++) {
-            if (aeroportos[i].compareTo(voo.getAeroportoOrigem()) == 0) {
-                origem = true;
-            }
+      return instance;
+   }
 
-            if (aeroportos[i].compareTo(voo.getAeroportoDestino()) == 0) {
-                destino = true;
-            }
-        }
+   public Voo buscar(String voo) {
+      return this.vooDAO.buscar(voo);
+   }
 
-        if (StringUtils.isVaziaOuNula(voo.getAeroportoOrigem()) && !origem) {
-            return "Aeroporto origem errado";
-        }
+   public String validarCiaNumero(String companhiaAerea, int numeroVoo) {
+      boolean validacaoCia = StringUtils.isVaziaOuNula(companhiaAerea) && companhiaAerea.length() == 2;
+      if (!validacaoCia) {
+         return "CIA aerea errada";
+      } else {
+         boolean validacaoNumero = numeroVoo >= 1000 && numeroVoo <= 9999;
+         return !validacaoNumero ? "Numero voo errado" : null;
+      }
+   }
 
-        if (StringUtils.isVaziaOuNula(voo.getAeroportoDestino()) && !destino) {
+   public String validar(Voo voo) {
+      boolean validarAeroportoOrigem = StringUtils.isVaziaOuNula(voo.getAeroportoOrigem()) && this.validarAeroporto(voo.getAeroportoOrigem());
+      if (!validarAeroportoOrigem) {
+         return "Aeroporto origem errado";
+      } else {
+         boolean validarAeroportoDestino = StringUtils.isVaziaOuNula(voo.getAeroportoDestino()) && this.validarAeroporto(voo.getAeroportoDestino());
+         if (!validarAeroportoDestino) {
             return "Aeroporto destino errado";
-        }
+         } else {
+            boolean validarAeroportoOrigemEDestino = voo.getAeroportoDestino().equals(voo.getAeroportoOrigem());
+            if (validarAeroportoOrigemEDestino) {
+               return "Aeroporto origem igual a aeroporto destino";
+            } else {
+               String erro = this.validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
+               return erro != null ? erro : null;
+            }
+         }
+      }
+   }
 
-        if (Objects.equals(voo.getAeroportoOrigem(), voo.getAeroportoDestino())) {
-            return "Aeroporto origem igual a aeroporto destino";
-        }
-    }
+   public String incluir(Voo voo) {
+      String erro = this.validar(voo);
+      if (erro == null) {
+         boolean verificacao = this.vooDAO.incluir(voo);
+         return verificacao ? null : "Voo ja existente";
+      } else {
+         return erro;
+      }
+   }
 
-    public String incluir(Voo voo) {
-        if (validar(voo) != null) {
-            return validar(voo);
-        }
-        else {
-            if (!vooDao.incluir(voo)) {
-                return "Voo ja existente";
-            }
-            else {
-                return null;
-            }
-        }
-    }
+   public String alterar(Voo voo) {
+      String erro = this.validar(voo);
+      if (erro == null) {
+         boolean verificacao = this.vooDAO.alterar(voo);
+         return verificacao ? null : "Voo inexistente";
+      } else {
+         return erro;
+      }
+   }
 
-    public String alterar(Voo voo) {
-        if (validar(voo) != null) {
-            return validar(voo);
-        }
-        else {
-            if (!vooDao.alterar(voo)) {
-                return "Voo existente";
-            }
-            else {
-                return null;
-            }
-        }
-    }
-
-    public String excluir(String idVoo) {
-        if (StringUtils.isVaziaOuNula(idVoo)) {
-            return "Id voo errado";
-        }
-        else {
-            if (!vooDao.excluir(idVoo)) {
-                return "Voo inexistente";
-            }
-            else {
-                return null;
-            }
-        }
-    }
+   public String excluir(String idvoo) {
+      Voo voo = this.buscar(idvoo);
+      if (voo == null) {
+         return "Voo inexistente";
+      } else {
+         String erro = this.validar(voo);
+         if (erro == null) {
+            boolean verificacao = this.vooDAO.excluir(voo.obterIdVoo());
+            return verificacao ? null : "Voo inexistente";
+         } else {
+            return erro;
+         }
+      }
+   }
 }

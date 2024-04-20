@@ -1,56 +1,72 @@
 package br.edu.cesarschool.cc.poo.ac.cliente;
-import br.edu.cesarschool.cc.poo.ac.utils.*;
+
+import br.edu.cesarschool.cc.poo.ac.utils.StringUtils;
+import br.edu.cesarschool.cc.poo.ac.utils.ValidadorCPF;
 
 public class ClienteMediator {
-	ClienteDAO clienteDAO;
+   private static ClienteMediator instance;
+   private ClienteDAO clienteDao = new ClienteDAO();
 
-    public Cliente buscar(String cpf) {
-		return clienteDAO.buscar(cpf);
-    }
-    
-    public String validar(Cliente cliente) {
-    	if (!ValidadorCPF.isCpfValido(cliente.getCpf())) {
-    		return "CPF errado";
-    	}
+   private ClienteMediator() {
+   }
 
-		if (StringUtils.isVaziaOuNula(cliente.getNome()) || cliente.getNome().length() < 2) {
-			return "nome errado";
-		}
+   public static synchronized ClienteMediator obterInstancia() {
+      if (instance == null) {
+         instance = new ClienteMediator();
+      }
 
-		if (cliente.getSaldoPontos() < 0) {
-			return "saldo errado";
-		}
+      return instance;
+   }
 
-		return null;
-    }
+   public Cliente buscar(String cpf) {
+      return this.clienteDao.buscar(cpf);
+   }
 
-	public String incluir(Cliente cliente) {
-		if (validar(cliente) != null) {
-			return validar(cliente);
-		}
-		else {
-			if (!clienteDAO.incluir(cliente)) {
-				return "Cliente ja existente";
-			}
-			else {
-				return null;
-			}
-		}
-	}
+   public String validar(Cliente cliente) {
+      boolean cpfvalido = ValidadorCPF.isCpfValido(cliente.getCpf());
+      boolean nomevalido = StringUtils.isVaziaOuNula(cliente.getNome()) && cliente.getNome().length() >= 2;
+      if (!nomevalido) {
+         return "nome errado";
+      } else if (!cpfvalido) {
+         return "CPF errado";
+      } else {
+         boolean saldovalido = cliente.getSaldoPontos() >= 0.0;
+         return !saldovalido ? "saldo errado" : null;
+      }
+   }
 
-	public String excluir(String cpf) {
-		if (!ValidadorCPF.isCpfValido(cpf)) {
-			return "CPF errado";
-		}
-		else {
-			if (clienteDAO.excluir(cpf)) {
-				return null;
-			}
-			else {
-				return "Cliente inexistente";
-			}
-		}
-	}
-    
-    
+   public String incluir(Cliente cliente) {
+      String erro = this.validar(cliente);
+      if (erro == null) {
+         boolean inclusao = this.clienteDao.incluir(cliente);
+         return inclusao ? null : "Cliente ja existente";
+      } else {
+         return erro;
+      }
+   }
+
+   public String alterar(Cliente cliente) {
+      String erro = this.validar(cliente);
+      if (erro == null) {
+         boolean alteracao = this.clienteDao.alterar(cliente);
+         return alteracao ? null : "Cliente inexistente";
+      } else {
+         return erro;
+      }
+   }
+
+   public String excluir(String cpf) {
+      Cliente cliente = this.buscar(cpf);
+      if (cliente == null) {
+         return "Cliente inexistente";
+      } else {
+         String erro = this.validar(cliente);
+         if (erro == null) {
+            boolean exclusao = this.clienteDao.excluir(cliente.getCpf());
+            return exclusao ? null : "Cliente inexistente";
+         } else {
+            return erro;
+         }
+      }
+   }
 }

@@ -1,5 +1,4 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
-import java.time.LocalDateTime;
 
 import br.edu.cesarschool.cc.poo.ac.utils.*;
 
@@ -9,8 +8,7 @@ public class Voo extends Registro {
 	private String companhiaAerea;
 	private int numeroVoo;
 	
-	public Voo(LocalDateTime dhInclusao,LocalDateTime dhUltimaAtualizacao, String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo) {
-		super(dhInclusao, dhUltimaAtualizacao);
+	public Voo( String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo) {
 		this.aeroportoOrigem = aeroportoOrigem;
 		this.aeroportoDestino = aeroportoDestino;
 		this.companhiaAerea = companhiaAerea;
