@@ -2,6 +2,13 @@
   <library name="PersistenciaObjetos">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/AtividadeContinuadaPOO/lib/PersistenciaObjetos.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/junit-jupiter-5.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/junit-jupiter-api-5.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/junit-jupiter-engine-5.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/junit-jupiter-params-5.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/junit-platform-commons-1.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/junit-platform-engine-1.8.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/opentest4j-1.2.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

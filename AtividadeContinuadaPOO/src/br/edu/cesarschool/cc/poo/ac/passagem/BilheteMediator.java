@@ -55,7 +55,7 @@ public class BilheteMediator {
     	 return null;
      }
      
-     public ResultadoGeracaoBilhete gerarBilhete(String cpf, String ciaAerea, int numeroVoo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {   
+     public ResultadoGeracaoBilhete gerarBilhete(String cpf, String ciaAerea, int numeroVoo, double preco, double pagamentoEmPontos, LocalDateTime dataHora) {
     	 String mensagemErro = validar(cpf, ciaAerea, numeroVoo, preco, pagamentoEmPontos, dataHora);
     	 if (mensagemErro != null) {
     		 return new ResultadoGeracaoBilhete(null, null, mensagemErro);
@@ -76,11 +76,13 @@ public class BilheteMediator {
          if (cliente.getSaldoPontos() < valorPontosNecessarios) {
             return new ResultadoGeracaoBilhete((Bilhete)null, (BilheteVip)null, "Pontos insuficientes");
          }
+
          Bilhete bilhete = new Bilhete(cliente, vooBuscado, preco, pagamentoEmPontos, dataHora);
          cliente.debitarPontos(valorPontosNecessarios);
          cliente.creditarPontos(bilhete.obterValorPontuacao());
-         if (!this.bilheteDao.incluir(bilhete)) {
-            return new ResultadoGeracaoBilhete((Bilhete)null, (BilheteVip)null, "Bilhete ja existente");
+
+         if (!bilheteDao.incluir(bilhete)) {
+            return new ResultadoGeracaoBilhete(null, null, "Bilhete ja existente");
          }
          return this.clienteMediator.alterar(cliente) != null ? new ResultadoGeracaoBilhete((Bilhete)null, (BilheteVip)null, "Erro ao atualizar cliente") : new ResultadoGeracaoBilhete(bilhete, null, null);
          
@@ -120,8 +122,7 @@ public class BilheteMediator {
     	 cliente.debitarPontos(pontosNecessarios);
     	 cliente.creditarPontos(bilheteVip.obterValorPontuacaoVip());
 
-    	 boolean inclusaoBilheteVip = bilheteVipDao.incluir(bilheteVip);
-    	 if (!inclusaoBilheteVip) {
+    	 if (!bilheteVipDao.incluir(bilheteVip)) {
     		return new ResultadoGeracaoBilhete(null, null, "Bilhete vip ja existente");
     	 }
 

@@ -7,10 +7,10 @@ public class StringUtils {
 	
 	public static boolean isVaziaOuNula(String valor) {
 		if (valor == null || valor.trim().isEmpty()) {
-			return true;
+			return false;
 		}
 		else {
-			return false;
+			return true;
 		}
 	}
 }

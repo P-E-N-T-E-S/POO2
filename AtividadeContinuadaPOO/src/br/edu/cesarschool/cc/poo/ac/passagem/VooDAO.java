@@ -3,7 +3,7 @@ import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
 import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 
 public class VooDAO {
-	private CadastroObjetos cadastro;
+	private CadastroObjetos cadastro = new CadastroObjetos(Voo.class);
 	
 	public VooDAO() {
 		
@@ -14,7 +14,7 @@ public class VooDAO {
 	}
 	
 	public Voo buscar(String idVoo) {
-		return (Voo) cadastro.buscar(idVoo);
+		return (Voo)cadastro.buscar(idVoo);
 	}
 	
 	public boolean incluir(Voo voo) {
