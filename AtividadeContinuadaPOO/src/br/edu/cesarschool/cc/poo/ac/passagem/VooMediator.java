@@ -61,10 +61,69 @@ public class VooMediator {
                return "Aeroporto origem igual a aeroporto destino";
             } else {
                String erro = this.validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
-               return erro != null ? erro : null;
+               if (erro != null) {
+                  return erro;
+               }
+               else {
+                  if (voo.getDiasDaSemana() == null || voo.getDiasDaSemana().length == 0) {
+                     return "Dias da semana não informados";
+                  }
+                  else {
+                     for (int i = 0; i < voo.getDiasDaSemana().length; i++) {
+                        for (int j = i + 1; j < voo.getDiasDaSemana().length; j++) {
+                           if (voo.getDiasDaSemana()[i] == voo.getDiasDaSemana()[j]) {
+                              return "Dia da semana repetido";
+                           }
+                        }
+                     }
+                  }
+               }
             }
          }
       }
+   }
+
+   public String validar(Voo voo) {
+      boolean validarAeroportoOrigem = StringUtils.isVaziaOuNula(voo.getAeroportoOrigem()) && this.validarAeroporto(voo.getAeroportoOrigem());
+      if (!validarAeroportoOrigem) {
+         return "Aeroporto origem errado";
+      }
+
+      boolean validarAeroportoDestino = StringUtils.isVaziaOuNula(voo.getAeroportoDestino()) && this.validarAeroporto(voo.getAeroportoDestino());
+      if (!validarAeroportoDestino) {
+         return "Aeroporto destino errado";
+      }
+
+      if (voo.getAeroportoOrigem().equals(voo.getAeroportoDestino())) {
+         return "Aeroporto origem igual a aeroporto destino";
+      }
+
+      String erroCiaNumero = this.validarCiaNumero(voo.getCompanhiaAerea(), voo.getNumeroVoo());
+      if (erroCiaNumero != null) {
+         return erroCiaNumero;
+      }
+
+      if (voo.getDiasDaSemana() == null || voo.getDiasDaSemana().length == 0) {
+         return "Dias da semana não informados";
+      }
+
+      for (int i = 0; i < voo.getDiasDaSemana().length; i++) {
+         for (int j = i + 1; j < voo.getDiasDaSemana().length; j++) {
+            if (voo.getDiasDaSemana()[i] == voo.getDiasDaSemana()[j]) {
+               return "Dia da semana repetido";
+            }
+         }
+      }
+
+      if (voo.getHora() == null) {
+         return "Hora não informada";
+      }
+
+      if (voo.getHora().getSecond() != 0 || (voo.getHora().getNano() / 1_000_000 != 0 && voo.getHora().getNano() != 0)) {
+         return "Hora inválida";
+      }
+
+      return null;
    }
 
    public String incluir(Voo voo) {
