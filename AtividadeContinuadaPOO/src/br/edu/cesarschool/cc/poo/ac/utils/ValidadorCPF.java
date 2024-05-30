@@ -3,16 +3,17 @@ package br.edu.cesarschool.cc.poo.ac.utils;
 public class ValidadorCPF {
     private ValidadorCPF() {
     }
-    public static boolean isCpfValido(String cpf) {
-        if(cpf == null) {
-            return false;
+
+    public static void isCpfValido(String cpf) throws CpfInvalidoException {
+        if (cpf == null || cpf.trim().isEmpty()) {
+            throw new CpfInvalidoException("CPF vazio ou nulo.");
         }
-        if (cpf.length() != 11) {
-            return false;
+        if (!cpf.matches("\\d{11}")) {
+            throw new CpfInvalidoException("CPF deve conter exatamente 11 dígitos numéricos.");
         }
 
-        if (cpf.matches("(\\d)\1{10}")) {
-            return false;
+        if (cpf.matches("(\\d)\\1{10}")) {
+            throw new CpfInvalidoException("CPF com todos os dígitos iguais é inválido.");
         }
 
         int soma = 0;
@@ -33,6 +34,8 @@ public class ValidadorCPF {
             digito2 = 0;
         }
 
-        return Character.getNumericValue(cpf.charAt(9)) == digito1 && Character.getNumericValue(cpf.charAt(10)) == digito2;
+        if (Character.getNumericValue(cpf.charAt(9)) != digito1 || Character.getNumericValue(cpf.charAt(10)) != digito2) {
+            throw new CpfInvalidoException("Dígitos verificadores do CPF são inválidos.");
+        }
     }
 }
