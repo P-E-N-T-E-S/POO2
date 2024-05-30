@@ -1,48 +1,46 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
-import java.io.Serializable;
-import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 
-public class BilheteVipDAO {
-    private CadastroObjetos cadastro = new CadastroObjetos(BilheteVip.class);
+import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
+import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
-    public BilheteVipDAO() {
+public class BilheteVipDAO extends SuperDAO<BilheteVip> {
 
+    @Override
+    public Class<BilheteVip> obterTipo() {
+        return BilheteVip.class;
     }
 
-    private String obterIdUnico(BilheteVip bilheteVip) {
-        return bilheteVip.gerarNumero();
+    public BilheteVip buscar(String numero) {
+        return (BilheteVip) daoGenerico.buscar(numero);
     }
 
-    public BilheteVip buscar(String numeroBilhete) {
-        return (BilheteVip) cadastro.buscar(numeroBilhete);
-    }
-
-    public boolean incluir(BilheteVip bilheteVip) {
-        String idUnico = obterIdUnico(bilheteVip);
-        BilheteVip biV = buscar(idUnico);
-        if (biV == null) {
-            cadastro.incluir(bilheteVip, idUnico);
-            return true;
+    public boolean incluir(BilheteVip bilhete) {
+        if (buscar(bilhete.getIdUnico()) == null) {
+            return daoGenerico.incluir(bilhete);
         }
         return false;
     }
 
-    public boolean alterar(BilheteVip bilheteVip) {
-        String idUnico = obterIdUnico(bilheteVip);
-        BilheteVip biV = buscar(idUnico);
-        if (biV != null) {
-            cadastro.alterar(bilheteVip, idUnico);
-            return true;
+    public boolean alterar(BilheteVip bilhete) {
+        if (buscar(bilhete.getIdUnico()) != null) {
+            return daoGenerico.alterar(bilhete);
         }
         return false;
     }
 
-    public boolean excluir(String numeroBilhete) {
-        BilheteVip biV = buscar(numeroBilhete);
-        if (biV != null) {
-            cadastro.excluir(numeroBilhete);
-            return true;
+    public boolean excluir(String numero) {
+        if (buscar(numero) != null) {
+            return daoGenerico.excluir(numero);
         }
         return false;
+    }
+
+    public BilheteVip[] buscarTodos() {
+        Registro[] registros = daoGenerico.buscarTodos();
+        BilheteVip[] bilhetesVip = new BilheteVip[registros.length];
+        for (int i = 0; i < registros.length; i++) {
+            bilhetesVip[i] = (BilheteVip) registros[i];
+        }
+        return bilhetesVip;
     }
 }

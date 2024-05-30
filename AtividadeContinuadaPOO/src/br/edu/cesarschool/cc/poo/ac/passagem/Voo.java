@@ -1,6 +1,8 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
 
-import br.edu.cesarschool.cc.poo.ac.utils.*;
+import br.edu.cesarschool.cc.poo.ac.utils.DiaDaSemana;
+import br.edu.cesarschool.cc.poo.ac.utils.Registro;
+
 import java.time.LocalTime;
 
 public class Voo extends Registro {
@@ -11,55 +13,54 @@ public class Voo extends Registro {
 	private DiaDaSemana[] diasDaSemana;
 	private LocalTime hora;
 
-	
-	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo, DiaDaSemana[] diasDaSemana, java.time.LocalTime hora) {
+	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo) {
 		this.aeroportoOrigem = aeroportoOrigem;
 		this.aeroportoDestino = aeroportoDestino;
 		this.companhiaAerea = companhiaAerea;
 		this.numeroVoo = numeroVoo;
+	}
+	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo, DiaDaSemana[] diasDaSemana, LocalTime horas) {
+		this(aeroportoOrigem, aeroportoDestino, companhiaAerea, numeroVoo);
 		this.diasDaSemana = diasDaSemana;
-		this.hora = hora;
+		this.hora = horas;
 	}
-
-	public Voo(String aeroportoOrigem, String aeroportoDestino, String companhiaAerea, int numeroVoo) {
-		this(aeroportoOrigem, aeroportoDestino, companhiaAerea, numeroVoo, null, null);
-	}
-
-
-	
 	public String getAeroportoOrigem() {
 		return aeroportoOrigem;
 	}
-	
+
 	public String getAeroportoDestino() {
 		return aeroportoDestino;
 	}
-	
+
 	public String getCompanhiaAerea() {
 		return companhiaAerea;
 	}
-	
+
 	public int getNumeroVoo() {
 		return numeroVoo;
+	}
+
+	public String obterIdVoo() {
+		return companhiaAerea + numeroVoo;
+	}
+
+	public LocalTime getHora() {
+		return hora;
+	}
+
+	public void setHora(LocalTime hora) {
+		this.hora = hora;
 	}
 
 	public DiaDaSemana[] getDiasDaSemana() {
 		return diasDaSemana;
 	}
 
-	public void setDiasDaSemana( DiaDaSemana[] diasDaSemana) {
+	public void setDiasDaSemana(DiaDaSemana[] diasDaSemana) {
 		this.diasDaSemana = diasDaSemana;
 	}
 
-	public java.time.LocalTime getHora() {
-		return hora;
-	}
-
-	public void setHora(java.time.LocalTime hora) {
-		this.hora = hora;
-	}
-	
-	public String obterIdVoo() {
-		return this.companhiaAerea + this.numeroVoo;
+	public String getIdUnico() {
+		return String.valueOf(getNumeroVoo());
 	}
 }

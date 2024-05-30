@@ -9,8 +9,8 @@ public enum DiaDaSemana {
     SABADO(6, “sábado”),
     DOMINGO(7, “domingo”);
 
-    private int codigo;
-    private String nome;
+    private final int codigo;
+    private final String nome;
 
     private DiaDaSemana(int codigo, String nome) {
         this.codigo = codigo;

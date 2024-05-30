@@ -1,48 +1,46 @@
 package br.edu.cesarschool.cc.poo.ac.passagem;
-import java.io.Serializable;
-import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 
-public class BilheteDAO {
-    private CadastroObjetos cadastro = new CadastroObjetos(Bilhete.class);
+import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
+import br.edu.cesarschool.cc.poo.ac.utils.Registro;
 
-    public BilheteDAO() {
+public class BilheteDAO extends SuperDAO<Bilhete> {
 
+    @Override
+    public Class<Bilhete> obterTipo() {
+        return Bilhete.class;
     }
 
-    private String obterIdUnico(Bilhete bilhete) {
-        return bilhete.gerarNumero();
-    }
-
-    public Bilhete buscar(String numeroBilhete) {
-        return (Bilhete) cadastro.buscar(numeroBilhete);
+    public Bilhete buscar(String numero) {
+        return (Bilhete) daoGenerico.buscar(numero);
     }
 
     public boolean incluir(Bilhete bilhete) {
-        String idUnico = obterIdUnico(bilhete);
-        Bilhete bi = buscar(idUnico);
-        if (bi == null) {
-            cadastro.incluir(bilhete, idUnico);
-            return true;
+        if (buscar(bilhete.getIdUnico()) == null) {
+            return daoGenerico.incluir(bilhete);
         }
         return false;
     }
 
     public boolean alterar(Bilhete bilhete) {
-        String idUnico = obterIdUnico(bilhete);
-        Bilhete bi = buscar(idUnico);
-        if (bi != null) {
-            cadastro.alterar(bilhete, idUnico);
-            return true;
+        if (buscar(bilhete.getIdUnico()) != null) {
+            return daoGenerico.alterar(bilhete);
         }
         return false;
     }
 
-    public boolean excluir(String numeroBilhete) {
-        Bilhete bi = buscar(numeroBilhete);
-        if (bi != null) {
-            cadastro.excluir(numeroBilhete);
-            return true;
+    public boolean excluir(String numero) {
+        if (buscar(numero) != null) {
+            return daoGenerico.excluir(numero);
         }
         return false;
+    }
+
+    public Bilhete[] buscarTodos() {
+        Registro[] registros = daoGenerico.buscarTodos();
+        Bilhete[] bilhetes = new Bilhete[registros.length];
+        for (int i = 0; i < registros.length; i++) {
+            bilhetes[i] = (Bilhete) registros[i];
+        }
+        return bilhetes;
     }
 }

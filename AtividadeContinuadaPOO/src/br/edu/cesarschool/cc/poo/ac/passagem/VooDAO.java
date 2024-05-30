@@ -1,49 +1,47 @@
-package br.edu.cesarschool.cc.poo.ac.passagem;
-import br.edu.cesarschool.cc.poo.ac.cliente.Cliente;
-import br.edu.cesarschool.next.oo.persistenciaobjetos.CadastroObjetos;
 
-public class VooDAO {
-	private CadastroObjetos cadastro = new CadastroObjetos(Voo.class);
-	
-	public VooDAO() {
-		
-	}
-	
-	private String obterIdUnico(Voo voo) {
-		return voo.getCompanhiaAerea() + voo.getNumeroVoo();
-	}
-	
-	public Voo buscar(String idVoo) {
-		return (Voo)cadastro.buscar(idVoo);
-	}
-	
-	public boolean incluir(Voo voo) {
-        String idUnico = obterIdUnico(voo);
-        Voo v = buscar(idUnico);
-        if (v == null) {
-            cadastro.incluir(voo, idUnico);
-            return true;
+package br.edu.cesarschool.cc.poo.ac.passagem;
+
+import br.edu.cesarschool.cc.poo.ac.utils.SuperDAO;
+import br.edu.cesarschool.cc.poo.ac.utils.Registro;
+
+public class VooDAO extends SuperDAO<Voo> {
+
+    @Override
+    public Class<Voo> obterTipo() {
+        return Voo.class;
+    }
+
+    public Voo buscar(String idVoo) {
+        return (Voo) daoGenerico.buscar(idVoo);
+    }
+
+    public boolean incluir(Voo voo) {
+        if (buscar(voo.getIdUnico()) == null) {
+            return daoGenerico.incluir(voo);
         }
         return false;
-	}
-	
+    }
+
     public boolean alterar(Voo voo) {
-        String idUnico = obterIdUnico(voo);
-        Voo v = buscar(idUnico);
-        if (v != null) {
-            cadastro.alterar(voo, idUnico);
-            return true;
+        if (buscar(voo.getIdUnico()) != null) {
+            return daoGenerico.alterar(voo);
         }
         return false;
     }
 
     public boolean excluir(String idVoo) {
-        Voo v = buscar(idVoo);
-        if (v != null) {
-            cadastro.excluir(idVoo);
-            return true;
+        if (buscar(idVoo) != null) {
+            return daoGenerico.excluir(idVoo);
         }
         return false;
     }
-}
 
+    public Voo[] buscarTodos() {
+        Registro[] registros = daoGenerico.buscarTodos();
+        Voo[] voos = new Voo[registros.length];
+        for (int i = 0; i < registros.length; i++) {
+            voos[i] = (Voo) registros[i];
+        }
+        return voos;
+    }
+}
